@@ -1,8 +1,8 @@
-.PHONY: build tag push-tag push-latest push
+.PHONY: build tag-latest push-tag push-latest push support
 
 ISO_DATE_TAG := $(shell date +%Y%m%d)
 
-all: build push
+all: build push support
 
 build:
 	docker build -t kingdonb/docker-rvm:$(ISO_DATE_TAG) .
@@ -17,3 +17,6 @@ push-latest: tag-latest
 	docker push kingdonb/docker-rvm:latest
 
 push: push-tag push-latest
+
+support:
+	$(MAKE) -C docker-rvm-support
