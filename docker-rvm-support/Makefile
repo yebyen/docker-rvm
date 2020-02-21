@@ -1,11 +1,21 @@
 .PHONY: build tag-latest push-tag push-latest push
+.PHONY: build-release push-release release push-unsupported-release
 .PHONY: build-unsupported tag-latest-unsupported push-tag-unsupported push-latest-unsupported
 
 ISO_DATE_TAG := $(shell date +%Y%m%d)
 
-all: build push
+all: build push-latest
+
+release: build-release push-tag push-latest
+
+push-release: push-tag push-latest
+
+push-unsupported-release: push-tag-unsupported push-latest-unsupported
 
 build:
+	docker build -t kingdonb/docker-rvm-support:latest .
+
+build-release:
 	docker build -t kingdonb/docker-rvm-support:$(ISO_DATE_TAG) .
 
 build-unsupported:
@@ -29,4 +39,4 @@ push-latest: tag-latest
 push-latest-unsupported: tag-latest-unsupported
 	docker push kingdonb/docker-rvm-support:latest-unsupported
 
-push: push-tag push-latest push-tag-unsupported push-latest-unsupported
+# push: push-tag push-latest push-tag-unsupported push-latest-unsupported
