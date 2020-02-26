@@ -1,0 +1,3 @@
+DIRECTORY_SERVERS = (oid-prod.oit.nd.edu:389:636)
+DEFAULT_ADMIN_CONTEXT = "dc=oit,dc=nd,dc=edu"
+DIRECTORY_SERVER_TYPE = OID
