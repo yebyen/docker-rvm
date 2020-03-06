@@ -13,6 +13,7 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends \
 # set the time zone
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
+  build-essential nodejs \
   tzdata libpq-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN echo "America/New_York" > /etc/timezone
 RUN unlink /etc/localtime
@@ -24,6 +25,7 @@ WORKDIR ${APPDIR}
 
 RUN chown ${RVM_USER} ${APPDIR}
 USER ${RVM_USER}
+RUN  bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash'
 
 # # Example downstream Dockerfile:
 # FROM kingdonb/docker-rvm-support:latest
