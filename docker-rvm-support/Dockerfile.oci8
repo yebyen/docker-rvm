@@ -5,7 +5,7 @@ ENV APPDIR="/home/${RVM_USER}/app"
 
 # install manpages and a little vim because I might need them
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  manpages vim-tiny && apt-get clean && rm -rf /var/lib/apt/lists/*
+  manpages vim-tiny runit python3 && apt-get clean && rm -rf /var/lib/apt/lists/*
 # make sure the base is upgraded, so downstream images don't have to do it
 RUN apt-get update && apt-get upgrade -y --no-install-recommends \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -39,8 +39,22 @@ RUN mkdir ${APPDIR}
 WORKDIR ${APPDIR}
 
 RUN chown ${RVM_USER} ${APPDIR}
+ADD my_init /usr/bin/my_init
+RUN mkdir -p /etc/my_init.d \
+  mkdir -p /etc/my_init.pre_shutdown.d ; \
+  mkdir -p /etc/my_init.post_shutdown.d ; \
+  mkdir -p /etc/container_environment ; \
+  touch /etc/container_environment.sh ; \
+  touch /etc/container_environment.json ; \
+  chmod 700 /etc/container_environment ; \
+    groupadd -g 8377 docker_env ; \
+    chown :docker_env /etc/container_environment.sh /etc/container_environment.json ; \
+    chmod 640 /etc/container_environment.sh /etc/container_environment.json ; \
+    ln -s /etc/container_environment.sh /etc/profile.d/
 USER ${RVM_USER}
 RUN  bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash'
+USER root
+ENTRYPOINT ["/sbin/my_init", "--"]
 
 # # Example downstream Dockerfile:
 # FROM kingdonb/docker-rvm-support:latest
