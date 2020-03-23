@@ -38,8 +38,8 @@ RUN mkdir -p /etc/my_init.d \
     ln -s /etc/container_environment.sh /etc/profile.d/
 USER ${RVM_USER}
 RUN  bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash'
-USER root
-ENTRYPOINT ["/sbin/my_init", "--"]
+# USER root
+# ENTRYPOINT ["/sbin/my_init", "--"]
 
 # # Example downstream Dockerfile:
 # FROM kingdonb/docker-rvm-support:latest
