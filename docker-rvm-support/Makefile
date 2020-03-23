@@ -12,7 +12,7 @@ release-all: build-release-all push-all
 
 build-release-all: build build-release build-release-oci8 build-unsupported build-unsupported-oci8 tag-latest tag-latest-unsupported
 
-push-all: push-all-oci8 push-tag-unsupported push-latest push-latest-unsupported
+push-all: push-tag push-all-oci8 push-tag-unsupported push-latest push-latest-unsupported
 
 release: build-release push-tag push-latest
 
