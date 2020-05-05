@@ -38,9 +38,11 @@ RUN apt update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install + verify RVM with gpg (https://rvm.io/rvm/security)
-RUN gpg2 --quiet --no-tty --logger-fd 1 --keyserver hkp://keys.gnupg.net \
-         --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
-                     7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
+# RUN gpg2 --quiet --no-tty --logger-fd 1 --keyserver hkp://keys.gnupg.net \
+#          --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 \
+#                      7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
+RUN curl -sSL https://rvm.io/mpapis.asc | gpg2 --import - \
+    && curl -sSL https://rvm.io/pkuczynski.asc | gpg2 --import - \
     && echo 409B6B1796C275462A1703113804BB82D39DC0E3:6: | \
        gpg2 --quiet --no-tty --logger-fd 1 --import-ownertrust \
     && curl -sSO https://raw.githubusercontent.com/rvm/rvm/${RVM_VERSION}/binscripts/rvm-installer \
