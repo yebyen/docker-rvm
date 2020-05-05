@@ -32,7 +32,7 @@ RUN set -ex \
 
 ENV LD_LIBRARY_PATH /opt/oracle/instantclient_12_2
 ENV TNS_ADMIN /etc/oracle
-ENV HOME "/home/${RVM_USER}"
+# ENV HOME "/home/${RVM_USER}"
 
 # put an app dir in place and ensure the user can manage it without escalation
 RUN mkdir ${APPDIR}
