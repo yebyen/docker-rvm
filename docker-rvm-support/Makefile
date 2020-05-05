@@ -6,7 +6,7 @@
 
 ISO_DATE_TAG := $(shell date +%Y%m%d)
 
-all: build push-latest
+all: build build-release build-release-oci8 push-latest release-all
 
 release-all: build-release-all push-all
 
