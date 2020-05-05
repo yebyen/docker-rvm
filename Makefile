@@ -5,7 +5,7 @@ ISO_DATE_TAG := $(shell date +%Y%m%d)
 all: build push support
 
 build:
-	docker build -t kingdonb/docker-rvm:$(ISO_DATE_TAG) .
+	docker build --no-cache -t kingdonb/docker-rvm:$(ISO_DATE_TAG) .
 
 tag-latest: build
 	docker tag kingdonb/docker-rvm:$(ISO_DATE_TAG) kingdonb/docker-rvm:latest
