@@ -12,6 +12,7 @@ RUN apt-get update && apt-get upgrade -y --no-install-recommends \
 
 # set the time zone
 ENV DEBIAN_FRONTEND=noninteractive
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential nodejs \
   tzdata libpq-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
