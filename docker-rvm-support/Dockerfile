@@ -1,5 +1,5 @@
-ARG RVM_RUBY_VERSIONS="2.6.6 2.7.1 2.5.8 2.4.10"
-FROM kingdonb/docker-rvm:20200620
+ARG RVM_RUBY_VERSIONS="2.6.6 2.7.1 2.5.8"
+FROM kingdonb/docker-rvm:20200706
 LABEL maintainer="Kingdon Barrett <kingdon.b@nd.edu>"
 ENV APPDIR="/home/${RVM_USER}/app"
 
@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # make sure the base is upgraded, so downstream images don't have to do it
 RUN apt-get update && apt-get upgrade -y --no-install-recommends \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
+# gem update to ensure railties binstubs are correct for Rails 6
+RUN echo 'gem: --no-document' > /root/.gemrc && bash --login -c 'gem update'
 
 # set the time zone
 ENV DEBIAN_FRONTEND=noninteractive
