@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get upgrade -y --no-install-recommends \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 # gem update to ensure railties binstubs are correct for Rails 6
-RUN  bash --login -c 'gem update'
+RUN echo 'gem: --no-document' > /root/.gemrc && bash --login -c 'gem update'
 
 # set the time zone
 ENV DEBIAN_FRONTEND=noninteractive
