@@ -2,11 +2,13 @@
 .PHONY: build-release push-release release push-unsupported-release build-oci8
 .PHONY: build-unsupported tag-latest-unsupported push-tag-unsupported push-latest-unsupported
 .PHONY: build-release-oci8 build-unsupported-oci8 push-all-oci8
-.PHONY: build-release-all push-all release-all
+.PHONY: build-release-all push-all release-all push-oci8 push-oci8-unsupported supported
 
 ISO_DATE_TAG := $(shell date +%Y%m%d)
 
 all: build build-release build-release-oci8 push-latest release-all
+
+supported: build-release build-release-oci8 tag-latest push-tag push-oci8 push-latest
 
 release-all: build-release-all push-all
 
@@ -37,8 +39,11 @@ build-unsupported:
 build-unsupported-oci8:
 	docker build -f Dockerfile.unsupported.oci8 -t kingdonb/docker-rvm-support:$(ISO_DATE_TAG)-oci8-unsupported .
 
-push-all-oci8:
+push-all-oci8: push-oci8 push-oci8-unsupported
+
+push-oci8:
 	docker push kingdonb/docker-rvm-support:$(ISO_DATE_TAG)-oci8
+push-oci8-unsupported:
 	docker push kingdonb/docker-rvm-support:$(ISO_DATE_TAG)-oci8-unsupported
 
 tag-latest: build
