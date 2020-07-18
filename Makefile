@@ -19,4 +19,4 @@ push-latest: tag-latest
 push: push-tag push-latest
 
 support:
-	$(MAKE) -C docker-rvm-support
+	$(MAKE) -C docker-rvm-support push-release
