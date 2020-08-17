@@ -51,7 +51,10 @@ ENV RUBY=2.7.1
 #
 # # include the ruby-version and Gemfile for bundle install
 COPY --chown=rvm Gemfile Gemfile.lock .ruby-version ${APPDIR}/
-RUN --mount=type=cache,target=/usr/local/rvm/gems/ruby-${RUBY} rvm ${RUBY} do bundle install
+RUN --mount=type=cache,target=/usr/local/rvm/gems/ruby-${RUBY} \
+    --mount=type=cache,target=/home/${RVM_USER}/.bundle/cache \
+      bash --login -c 'bundle install'
+      #rvm ${RUBY} do bundle install
 #
 # # include the app source code
 # ADD ./ ${APPDIR}
