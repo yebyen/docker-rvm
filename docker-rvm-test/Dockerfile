@@ -1,3 +1,4 @@
+# syntax = docker/dockerfile:experimental
 ARG RVM_RUBY_VERSIONS="2.7.1"
 FROM kingdonb/docker-rvm:20200815 as test-base
 LABEL maintainer="Kingdon Barrett <kingdon.b@nd.edu>"
@@ -50,7 +51,7 @@ ENV RUBY=2.7.1
 #
 # # include the ruby-version and Gemfile for bundle install
 COPY --chown=rvm Gemfile Gemfile.lock .ruby-version ${APPDIR}/
-RUN  bash --login -c 'bundle install'
+RUN --mount=type=cache,target=/usr/local/rvm/gems/ruby-${RUBY} rvm ${RUBY} do bundle install
 #
 # # include the app source code
 # ADD ./ ${APPDIR}
