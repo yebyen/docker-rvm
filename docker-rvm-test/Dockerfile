@@ -52,11 +52,11 @@ ENV RUBY=2.7.1
 # # include the ruby-version and Gemfile for bundle install
 COPY --chown=rvm Gemfile Gemfile.lock .ruby-version ${APPDIR}/
 
+RUN mkdir -p /home/${RVM_USER}/app/.cache/bundle
 RUN bundle config set app_config .bundle
 RUN bundle config set path .cache/bundle
-RUN --mount=type=cache,uid=999,target=/home/${RVM_USER}/app/.cache/bundle \
-    --mount=type=cache,uid=999,target=/home/${RVM_USER}/.bundle/cache \
-      rvm ${RUBY} do bundle install && \
+RUN --mount=type=cache,uid=999,gid=1000,target=/home/rvm/app/.cache/bundle \
+    rvm ${RUBY} do bundle install && \
       mkdir -p vendor && \
       cp -ar .cache/bundle vendor/bundle
 RUN bundle config set path vendor/bundle
