@@ -9,8 +9,7 @@ test:
 	docker build --target test -t kingdonb/docker-rvm:$(ISO_DATE_TAG)-test .
 
 buildkit:
-	DOCKER_BUILDKIT=1 docker build --target test -t kingdonb/docker-rvm:20200816-test \
-		--build-arg BUILDKIT_INLINE_CACHE=1 .
+	docker buildx build -t kingdonb/docker-rvm:$(ISO_DATE_TAG)-test .
 
 tag-latest: test
 	docker tag kingdonb/docker-rvm:$(ISO_DATE_TAG)-test-base kingdonb/docker-rvm:test-base
