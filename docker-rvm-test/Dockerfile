@@ -14,32 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
   && bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash' \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
-# gem update to ensure railties binstubs are correct for Rails 6
-RUN echo 'gem: --no-document' > /root/.gemrc && bash --login -c 'gem update'
 
-# set the time zone
-ENV DEBIAN_FRONTEND=noninteractive
-RUN echo "America/New_York" > /etc/timezone
-RUN unlink /etc/localtime
-RUN dpkg-reconfigure -f noninteractive tzdata
-
-# put an app dir in place and ensure the user can manage it without escalation
-RUN mkdir ${APPDIR}
-WORKDIR ${APPDIR}
-
-RUN chown ${RVM_USER} ${APPDIR}
-# ADD my_init /sbin/my_init
-# RUN mkdir -p /etc/my_init.d \
-#   mkdir -p /etc/my_init.pre_shutdown.d ; \
-#   mkdir -p /etc/my_init.post_shutdown.d ; \
-#   mkdir -p /etc/container_environment ; \
-#   touch /etc/container_environment.sh ; \
-#   touch /etc/container_environment.json ; \
-#   chmod 700 /etc/container_environment ; \
-#     groupadd -g 8377 docker_env ; \
-#     chown :docker_env /etc/container_environment.sh /etc/container_environment.json ; \
-#     chmod 640 /etc/container_environment.sh /etc/container_environment.json ; \
-#     ln -s /etc/container_environment.sh /etc/profile.d/
 USER ${RVM_USER}
 RUN  echo 'gem: --no-document' > /home/${RVM_USER}/.gemrc && rvm ${RUBY} do gem update --system
 # USER root
