@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:experimental
 ARG RVM_RUBY_VERSIONS="2.7.1"
-FROM kingdonb/docker-rvm:20200829 as test-base
+FROM kingdonb/docker-rvm-support:20200829 as test-base
 LABEL maintainer="Kingdon Barrett <kingdon.b@nd.edu>"
 ENV APPDIR="/home/${RVM_USER}/app"
 
