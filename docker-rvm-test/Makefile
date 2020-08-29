@@ -1,4 +1,4 @@
-.PHONY: test tag-latest push-tag push-latest push buildkit all old-all
+.PHONY: test tag-latest push-tag push-latest push buildkit all old-all okteto-build
 
 ISO_DATE_TAG := $(shell date +%Y%m%d)
 
@@ -9,6 +9,9 @@ old-all: test push
 test:
 	docker build --no-cache --target test-base -t kingdonb/docker-rvm:$(ISO_DATE_TAG)-test-base .
 	docker build --target test -t kingdonb/docker-rvm:$(ISO_DATE_TAG)-test .
+
+okteto-build:
+	okteto build -t okteto.dev/docker-rvm:$(ISO_DATE_TAG)-test .
 
 buildkit:
 	docker buildx build -t kingdonb/docker-rvm:$(ISO_DATE_TAG)-test .
