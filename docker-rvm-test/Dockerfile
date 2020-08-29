@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:experimental
 ARG RVM_RUBY_VERSIONS="2.7.1"
-FROM kingdonb/docker-rvm:20200815 as test-base
+FROM kingdonb/docker-rvm:20200829 as test-base
 LABEL maintainer="Kingdon Barrett <kingdon.b@nd.edu>"
 ENV APPDIR="/home/${RVM_USER}/app"
 
@@ -41,6 +41,7 @@ RUN chown ${RVM_USER} ${APPDIR}
 #     chmod 640 /etc/container_environment.sh /etc/container_environment.json ; \
 #     ln -s /etc/container_environment.sh /etc/profile.d/
 USER ${RVM_USER}
+RUN  echo 'gem: --no-document' > /home/${RVM_USER}/.gemrc && rvm ${RUBY} do gem update --system
 RUN  bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash'
 # USER root
 # ENTRYPOINT ["/sbin/my_init", "--"]
