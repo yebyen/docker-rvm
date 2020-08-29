@@ -1,8 +1,10 @@
-.PHONY: test tag-latest push-tag push-latest push buildkit
+.PHONY: test tag-latest push-tag push-latest push buildkit all old-all
 
 ISO_DATE_TAG := $(shell date +%Y%m%d)
 
-all: test push
+all: buildkit
+
+old-all: test push
 
 test:
 	docker build --no-cache --target test-base -t kingdonb/docker-rvm:$(ISO_DATE_TAG)-test-base .
