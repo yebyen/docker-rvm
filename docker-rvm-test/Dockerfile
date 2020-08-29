@@ -16,13 +16,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER ${RVM_USER}
+ENV RUBY=2.7.1
 RUN  echo 'gem: --no-document' > /home/${RVM_USER}/.gemrc && rvm ${RUBY} do gem update --system
 # USER root
 # ENTRYPOINT ["/sbin/my_init", "--"]
 
 # # Example downstream Dockerfile:
 FROM test-base as test
-ENV RUBY=2.7.1
 #
 # # include the ruby-version and Gemfile for bundle install
 COPY --chown=rvm Gemfile Gemfile.lock .ruby-version ${APPDIR}/
