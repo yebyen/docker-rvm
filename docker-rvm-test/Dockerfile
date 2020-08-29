@@ -4,6 +4,7 @@ FROM kingdonb/docker-rvm-support:20200829 as test-base
 LABEL maintainer="Kingdon Barrett <kingdon.b@nd.edu>"
 ENV APPDIR="/home/${RVM_USER}/app"
 
+USER root
 # install manpages and a little vim because I might need them
 RUN apt-get update && apt-get install -y --no-install-recommends \
   manpages vim-tiny runit python3 && apt-get clean && rm -rf /var/lib/apt/lists/*
