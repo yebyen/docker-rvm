@@ -7,19 +7,18 @@ ENV APPDIR="/home/${RVM_USER}/app"
 USER root
 # install manpages and a little vim because I might need them
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  manpages vim-tiny runit python3 && apt-get clean && rm -rf /var/lib/apt/lists/*
-# make sure the base is upgraded, so downstream images don't have to do it
-RUN apt-get update && apt-get upgrade -y --no-install-recommends \
+  manpages vim-tiny runit python3 \
+  build-essential nodejs \
+  tzdata libpq-dev \
+  && apt-get upgrade -y --no-install-recommends \
+  && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+  && bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash' \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 # gem update to ensure railties binstubs are correct for Rails 6
 RUN echo 'gem: --no-document' > /root/.gemrc && bash --login -c 'gem update'
 
 # set the time zone
 ENV DEBIAN_FRONTEND=noninteractive
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  build-essential nodejs \
-  tzdata libpq-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 RUN echo "America/New_York" > /etc/timezone
 RUN unlink /etc/localtime
 RUN dpkg-reconfigure -f noninteractive tzdata
@@ -43,7 +42,6 @@ RUN chown ${RVM_USER} ${APPDIR}
 #     ln -s /etc/container_environment.sh /etc/profile.d/
 USER ${RVM_USER}
 RUN  echo 'gem: --no-document' > /home/${RVM_USER}/.gemrc && rvm ${RUBY} do gem update --system
-RUN  bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash'
 # USER root
 # ENTRYPOINT ["/sbin/my_init", "--"]
 
