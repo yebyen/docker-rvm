@@ -19,7 +19,7 @@
 #
 #   * RVM_RUBY_DEFAULT
 ##
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # RVM version to install
 ARG RVM_VERSION=stable
