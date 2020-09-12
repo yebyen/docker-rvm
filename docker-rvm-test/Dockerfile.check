@@ -1,0 +1,6 @@
+FROM yebyen/docker-rvm:test
+# RUN bash -c "\
+#   source /etc/profile.d/rvm.sh &&\
+#   cd /home/rvm/app &&\
+#   bundle check"
+RUN bash --login -c 'bundle check'
