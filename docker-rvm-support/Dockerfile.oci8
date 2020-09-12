@@ -27,13 +27,13 @@ COPY ora-support/tns /etc/oracle
 RUN set -ex \
   && mkdir -p /opt/oracle \
   && cd /opt/oracle \
-  && unzip /instantclient-basiclite-linux.x64-12.2.0.1.0.zip \
-  && unzip /instantclient-sdk-linux.x64-12.2.0.1.0.zip \
-  && unzip /instantclient-sqlplus-linux.x64-12.2.0.1.0.zip \
-  && cd /opt/oracle/instantclient_12_2 \
-  && ln -s libclntsh.so.12.1 libclntsh.so
+  && unzip /instantclient-basiclite-linux.x64-19.8.0.0.0dbru.zip \
+  && unzip /instantclient-sdk-linux.x64-19.8.0.0.0dbru.zip \
+  && unzip /instantclient-sqlplus-linux.x64-19.8.0.0.0dbru.zip \
+  && cd /opt/oracle/instantclient_19_8 # \
+  # && ln -s libclntsh.so.19.1 libclntsh.so
 
-ENV LD_LIBRARY_PATH /opt/oracle/instantclient_12_2
+ENV LD_LIBRARY_PATH /opt/oracle/instantclient_19_8
 ENV TNS_ADMIN /etc/oracle
 # ENV HOME "/home/${RVM_USER}"
 
