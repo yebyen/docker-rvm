@@ -28,7 +28,7 @@ WORKDIR ${APPDIR}
 
 RUN chown ${RVM_USER} ${APPDIR}
 ADD my_init /sbin/my_init
-RUN mkdir -p /etc/my_init.d \
+RUN mkdir -p /etc/my_init.d ; \
   mkdir -p /etc/my_init.pre_shutdown.d ; \
   mkdir -p /etc/my_init.post_shutdown.d ; \
   mkdir -p /etc/container_environment ; \
