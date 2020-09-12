@@ -26,6 +26,7 @@ FROM test-base as test
 #
 # # include the ruby-version and Gemfile for bundle install
 COPY --chown=rvm Gemfile Gemfile.lock .ruby-version ${APPDIR}/
+ENV LD_LIBRARY_PATH /opt/oracle/instantclient_19_8
 
 RUN mkdir -p /home/${RVM_USER}/app/.cache/bundle
 RUN bundle config set app_config .bundle
