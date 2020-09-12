@@ -1,5 +1,5 @@
-.PHONY: test tag-latest push-tag push-latest push buildkit all old-all okteto-build buildkit-nocache fresh
-.PHONY: bundle-install bundle-update
+.PHONY: test tag-latest push-tag push-latest push buildkit all old-all okteto-build
+.PHONY: buildkit-nocache fresh bundle-install bundle-update
 
 ISO_DATE_TAG := $(shell date +%Y%m%d)
 
