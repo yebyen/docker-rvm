@@ -29,13 +29,13 @@ COPY --chown=rvm Gemfile Gemfile.lock .ruby-version ${APPDIR}/
 ENV LD_LIBRARY_PATH /opt/oracle/instantclient_19_8
 
 RUN mkdir -p /home/${RVM_USER}/app/.cache/bundle
-RUN bundle config set app_config .bundle
-RUN bundle config set path .cache/bundle
+RUN bundle config app_config .bundle
+RUN bundle config path .cache/bundle
 RUN --mount=type=cache,uid=999,gid=1000,target=/home/rvm/app/.cache/bundle \
     rvm ${RUBY} do bundle install && \
       mkdir -p vendor && \
       cp -ar .cache/bundle vendor/bundle
-RUN bundle config set path vendor/bundle
+RUN bundle config path vendor/bundle
 
 #
 # # include the app source code
