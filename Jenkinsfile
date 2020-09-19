@@ -1,23 +1,4 @@
 pipeline {
-  triggers {
-    GenericTrigger(
-     genericVariables: [
-      [key: 'ref', value: '$.ref']
-     ],
-
-     causeString: 'Triggered on $ref',
-
-     token: 'napha9shaiz3sieWa1zohmi,y0phooqu6Thaiqui9foath`o3ocae2ee2Juquah0',
-
-     printContributedVariables: true,
-     printPostContent: true,
-
-     silentResponse: false,
-
-     regexpFilterText: '$ref',
-     regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
-    )
-  }
   agent {
     kubernetes {
       yaml """
