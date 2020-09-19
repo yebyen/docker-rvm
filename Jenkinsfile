@@ -61,8 +61,8 @@ spec:
             passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
             sh """\
               docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-              docker build -t yebyen/docker-rvm:${gitCommit} .
-              docker push yebyen/docker-rvm:${gitCommit}
+              docker build -t yebyen/docker-rvm:${env.GIT_COMMIT} .
+              docker push yebyen/docker-rvm:${env.GIT_COMMIT}
               """.stripIndent()
           }
         }
@@ -92,7 +92,7 @@ spec:
             usernameVariable: 'DOCKER_HUB_USER',
             passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
             sh """
-              docker tag yebyen/docker-rvm:${gitCommit} yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
+              docker tag yebyen/docker-rvm:${env.GIT_COMMIT} yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
               docker push yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
               """.stripIndent()
           }
