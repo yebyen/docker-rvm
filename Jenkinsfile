@@ -53,55 +53,65 @@ spec:
   }
   stages {
     stage('Build') {
-      container('docker') {
-        withCredentials([[$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'dockerhub',
-          usernameVariable: 'DOCKER_HUB_USER',
-          passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
-          sh """\
-            docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-            docker build -t yebyen/docker-rvm:${gitCommit} .
-            docker push yebyen/docker-rvm:${gitCommit}
-            """.stripIndent()
+      steps {
+        container('docker') {
+          withCredentials([[$class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'dockerhub',
+            usernameVariable: 'DOCKER_HUB_USER',
+            passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
+            sh """\
+              docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
+              docker build -t yebyen/docker-rvm:${gitCommit} .
+              docker push yebyen/docker-rvm:${gitCommit}
+              """.stripIndent()
+          }
         }
       }
     }
     stage('Test') {
-      container('test') {
-        sh """\
-          bash --login -c '\
-          export DATABASE_TEST_URL=oracle-enhanced://no-user@no-host:5432/none
-          export DATABASE_URL=oracle-enhanced://no-user@no-host:5432/none
+      steps {
+        container('test') {
+          sh """\
+            bash --login -c '\
+            export DATABASE_TEST_URL=oracle-enhanced://no-user@no-host:5432/none
+            export DATABASE_URL=oracle-enhanced://no-user@no-host:5432/none
 
-          bundle config app_config .bundle
-          bundle config path /tmp/vendor/bundle
-          bundle check && bundle exec rspec
-          '
-          """.stripIndent()
+            bundle config app_config .bundle
+            bundle config path /tmp/vendor/bundle
+            bundle check && bundle exec rspec
+            '
+            """.stripIndent()
+        }
       }
     }
     stage('Push Test') {
-      container('docker') {
-        withCredentials([[$class: 'UsernamePasswordMultiBinding',
-          credentialsId: 'dockerhub',
-          usernameVariable: 'DOCKER_HUB_USER',
-          passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
-          sh """
-            docker tag yebyen/docker-rvm:${gitCommit} yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
-            docker push yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
-            """.stripIndent()
+      steps {
+        container('docker') {
+          withCredentials([[$class: 'UsernamePasswordMultiBinding',
+            credentialsId: 'dockerhub',
+            usernameVariable: 'DOCKER_HUB_USER',
+            passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
+            sh """
+              docker tag yebyen/docker-rvm:${gitCommit} yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
+              docker push yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
+              """.stripIndent()
+          }
         }
       }
     }
     /*
     stage('Run kubectl') {
-      container('kubectl') {
-        sh "kubectl version"
+      steps {
+        container('kubectl') {
+          sh "kubectl version"
+        }
       }
     }
     stage('Run helm') {
-      container('helm') {
-        sh "helm list"
+      steps {
+        container('helm') {
+          sh "helm list"
+        }
       }
     }
     */
