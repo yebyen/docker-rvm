@@ -21,9 +21,9 @@ spec:
       name: var-run-docker-sock
 
   - name: test
-    image: kingdonb/pzaexcp-api:test
+    image: yebyen/docker-rvm:test
     imagePullSecrets:
-    - kingdonb-pull-secret
+    - yebyen-docker-hub
     securityContext:
       runAsUser: 1000
     command:
@@ -46,8 +46,8 @@ spec:
           passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
           sh """\
             docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
-            docker build -t kingdonb/pzaexcp-api:${gitCommit} .
-            docker push kingdonb/pzaexcp-api:${gitCommit}
+            docker build -t yebyen/docker-rvm:${gitCommit} .
+            docker push yebyen/pzaexcp-api:${gitCommit}
             """.stripIndent()
         }
       }
@@ -73,8 +73,8 @@ spec:
           usernameVariable: 'DOCKER_HUB_USER',
           passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
           sh """
-            docker tag kingdonb/pzaexcp-api:${gitCommit} kingdonb/pzaexcp-api:test
-            docker push kingdonb/pzaexcp-api:test
+            docker tag yebyen/docker-rvm:${gitCommit} yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
+            docker push yebyen/pzaexcp-api:${new Date().format("yyyyMMdd")}
             """.stripIndent()
         }
       }
