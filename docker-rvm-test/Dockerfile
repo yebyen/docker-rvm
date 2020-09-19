@@ -1,19 +1,20 @@
 # syntax = docker/dockerfile:experimental
 ARG RVM_RUBY_VERSIONS="2.7.1"
-FROM kingdonb/docker-rvm-support:20200912-oci8 as test-base
+FROM kingdonb/docker-rvm-support:20200918-oci8 as test-base
 LABEL maintainer="Kingdon Barrett <kingdon.b@nd.edu>"
 ENV APPDIR="/home/${RVM_USER}/app"
 
 USER root
 # install manpages and a little vim because I might need them
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN --mount=type=cache,uid=0,gid=0,target=/var/cache/apt/archives/ \
+    --mount=type=cache,uid=0,gid=0,target=/var/lib/apt/lists/ \
+  apt-get update && apt-get install -y --no-install-recommends \
   manpages vim-tiny runit python3 \
   build-essential nodejs \
   tzdata libpq-dev \
   && apt-get upgrade -y --no-install-recommends \
   && curl -sL https://deb.nodesource.com/setup_14.x | bash - \
-  && bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash' \
-  && apt-get clean && rm -rf /var/lib/apt/lists/*
+  && bash --login -c 'curl -o- -L https://yarnpkg.com/install.sh | bash'
 
 USER ${RVM_USER}
 ENV RUBY=2.7.1
