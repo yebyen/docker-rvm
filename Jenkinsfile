@@ -1,7 +1,26 @@
-def label = "worker-${UUID.randomUUID().toString()}"
+pipeline {
+  triggers {
+    GenericTrigger(
+     genericVariables: [
+      [key: 'ref', value: '$.ref']
+     ],
 
-podTemplate(label: label,
-  yaml: """
+     causeString: 'Triggered on $ref',
+
+     token: 'napha9shaiz3sieWa1zohmi,y0phooqu6Thaiqui9foath`o3ocae2ee2Juquah0',
+
+     printContributedVariables: true,
+     printPostContent: true,
+
+     silentResponse: false,
+
+     regexpFilterText: '$ref',
+     regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
+    )
+  }
+  agent {
+    kubernetes {
+      yaml """
 apiVersion: v1
 kind: Pod
 spec:
@@ -30,8 +49,9 @@ spec:
     - cat
     tty: true
 """
-) {
-  node(label) {
+    }
+  }
+  stages {
     def myRepo = checkout scm
     def gitCommit = myRepo.GIT_COMMIT
     def gitBranch = myRepo.GIT_BRANCH
