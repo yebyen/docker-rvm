@@ -47,7 +47,7 @@ spec:
           sh """\
             docker login -u ${DOCKER_HUB_USER} -p ${DOCKER_HUB_PASSWORD}
             docker build -t yebyen/docker-rvm:${gitCommit} .
-            docker push yebyen/pzaexcp-api:${gitCommit}
+            docker push yebyen/docker-rvm:${gitCommit}
             """.stripIndent()
         }
       }
