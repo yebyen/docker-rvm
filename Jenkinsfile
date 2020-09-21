@@ -70,6 +70,7 @@ spec:
             cd docker-rvm-test
             bundle config app_config .bundle
             bundle config path /tmp/vendor/bundle
+            rvm install 2.7.1
             # bundle check && bundle exec rspec
             bundle check && ruby --version
             '
