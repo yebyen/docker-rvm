@@ -1,6 +1,9 @@
 pipeline {
-  agent {
-    kubernetes {
+  agent none
+  stages {
+    stage('Build') {
+      agent {
+        kubernetes {
       yaml """
 apiVersion: v1
 kind: Pod
@@ -19,21 +22,9 @@ spec:
     volumeMounts:
     - mountPath: /var/run/docker.sock
       name: var-run-docker-sock
-
-  - name: test
-    image: yebyen/docker-rvm:test
-    imagePullSecrets:
-    - yebyen-docker-hub
-    securityContext:
-      runAsUser: 1000
-    command:
-    - cat
-    tty: true
 """
-    }
-  }
-  stages {
-    stage('Build') {
+        }
+      }
       steps {
         container('docker') {
           withCredentials([[$class: 'UsernamePasswordMultiBinding',
@@ -50,6 +41,23 @@ spec:
       }
     }
     stage('Test') {
+      agent {
+        kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+  - name: test
+    image: yebyen/docker-rvm:${env.GIT_COMMIT}
+    imagePullSecrets:
+    - yebyen-docker-hub
+    securityContext:
+      runAsUser: 1000
+    command:
+    - cat
+    tty: true
+"""
+        }
+      }
       steps {
         container('test') {
           sh """\
@@ -57,15 +65,40 @@ spec:
             export DATABASE_TEST_URL=oracle-enhanced://no-user@no-host:5432/none
             export DATABASE_URL=oracle-enhanced://no-user@no-host:5432/none
 
+            cd docker-rvm-test
             bundle config app_config .bundle
             bundle config path /tmp/vendor/bundle
-            bundle check && bundle exec rspec
+            # bundle check && bundle exec rspec
+            bundle check && ruby --version
             '
             """.stripIndent()
         }
       }
     }
     stage('Push Test') {
+      agent {
+        kubernetes {
+      yaml """
+apiVersion: v1
+kind: Pod
+spec:
+  volumes:
+  - name: var-run-docker-sock
+    hostPath:
+      path: /var/run/docker.sock
+
+  containers:
+  - name: docker
+    image: docker
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - mountPath: /var/run/docker.sock
+      name: var-run-docker-sock
+"""
+        }
+      }
       steps {
         container('docker') {
           withCredentials([[$class: 'UsernamePasswordMultiBinding',
