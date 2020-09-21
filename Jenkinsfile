@@ -33,7 +33,7 @@ spec:
     imagePullSecrets:
     - yebyen-docker-hub
     securityContext:
-      runAsUser: 1000
+      runAsUser: 0
     command:
     - cat
     tty: true
@@ -48,9 +48,9 @@ spec:
             export DATABASE_URL=oracle-enhanced://no-user@no-host:5432/none
 
             cd docker-rvm-test
+            rvm install 2.7.1
             bundle config app_config .bundle
             bundle config path /tmp/vendor/bundle
-            rvm install 2.7.1
             # bundle check && bundle exec rspec
             bundle check && ruby --version
             '
