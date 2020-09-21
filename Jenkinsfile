@@ -51,6 +51,7 @@ spec:
             rvm install 2.7.1
             bundle config app_config .bundle
             bundle config path /tmp/vendor/bundle
+            bundle install
             # bundle check && bundle exec rspec
             bundle check && ruby --version
             '
