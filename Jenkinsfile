@@ -46,6 +46,8 @@ spec:
       yaml """
 apiVersion: v1
 kind: Pod
+spec:
+  containers:
   - name: test
     image: yebyen/docker-rvm:${env.GIT_COMMIT}
     imagePullSecrets:
