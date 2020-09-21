@@ -3,27 +3,7 @@ pipeline {
   stages {
     stage('Build') {
       agent {
-        kubernetes {
-      yaml """
-apiVersion: v1
-kind: Pod
-spec:
-  volumes:
-  - name: var-run-docker-sock
-    hostPath:
-      path: /var/run/docker.sock
-
-  containers:
-  - name: docker
-    image: docker
-    command:
-    - cat
-    tty: true
-    volumeMounts:
-    - mountPath: /var/run/docker.sock
-      name: var-run-docker-sock
-"""
-        }
+        kubernetes { yamlFile "jenkins/docker-pod.yaml" }
       }
       steps {
         container('docker') {
@@ -80,27 +60,7 @@ spec:
     }
     stage('Push Test') {
       agent {
-        kubernetes {
-      yaml """
-apiVersion: v1
-kind: Pod
-spec:
-  volumes:
-  - name: var-run-docker-sock
-    hostPath:
-      path: /var/run/docker.sock
-
-  containers:
-  - name: docker
-    image: docker
-    command:
-    - cat
-    tty: true
-    volumeMounts:
-    - mountPath: /var/run/docker.sock
-      name: var-run-docker-sock
-"""
-        }
+        kubernetes { yamlFile "jenkins/docker-pod.yaml" }
       }
       steps {
         container('docker') {
@@ -116,21 +76,5 @@ spec:
         }
       }
     }
-    /*
-    stage('Run kubectl') {
-      steps {
-        container('kubectl') {
-          sh "kubectl version"
-        }
-      }
-    }
-    stage('Run helm') {
-      steps {
-        container('helm') {
-          sh "helm list"
-        }
-      }
-    }
-    */
   }
 }

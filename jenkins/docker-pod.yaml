@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+spec:
+  volumes:
+  - name: var-run-docker-sock
+    hostPath:
+      path: /var/run/docker.sock
+
+  containers:
+  - name: docker
+    image: docker
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - mountPath: /var/run/docker.sock
+      name: var-run-docker-sock
